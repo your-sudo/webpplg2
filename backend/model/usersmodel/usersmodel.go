@@ -23,3 +23,24 @@ func TampilUser() []entities.Users {
 	}
 	return users
 }
+
+func LoginUser() []entities.Login {
+	rows, err := config.DB.Query("SELECT username, password FROM users")
+	if err != nil {
+		panic(err)
+
+	}
+	defer rows.Close()
+
+	var login []entities.Login
+
+	for rows.Next() {
+		var l entities.Login
+		if err := rows.Scan(&l.Username, &l.Password); err != nil {
+			panic(err)
+		}
+		login = append(login, l)
+	}
+	return login
+
+}
